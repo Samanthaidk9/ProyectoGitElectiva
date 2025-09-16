@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas Universitarias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        primary: {
+                            DEFAULT: 'hsl(var(--primary))',
+                            foreground: 'hsl(var(--primary-foreground))'
+                        },
+                        secondary: {
+                            DEFAULT: 'hsl(var(--secondary))',
+                            foreground: 'hsl(var(--secondary-foreground))'
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(var(--muted))',
+                            foreground: 'hsl(var(--muted-foreground))'
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(var(--accent))',
+                            foreground: 'hsl(var(--accent-foreground))'
+                        },
+                        destructive: {
+                            DEFAULT: 'hsl(var(--destructive))',
+                            foreground: 'hsl(var(--destructive-foreground))'
+                        },
+                        border: 'hsl(var(--border))',
+                        input: 'hsl(var(--input))',
+                        ring: 'hsl(var(--ring))'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-foreground min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-primary mb-2">Gestor de Tareas Universitarias</h1>
+            <p class="text-muted-foreground">Organiza y gestiona todas tus tareas académicas</p>
+        </header>
+
+        <!-- Formulario para agregar tareas -->
+        <div class="bg-card rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Agregar Nueva Tarea</h2>
+            <form id="task-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Título de la tarea</label>
+                        <input type="text" id="task-title" required 
+                               class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Materia/Asignatura</label>
+                        <input type="text" id="task-subject" 
+                               class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Descripción</label>
+                    <textarea id="task-description" rows="3"
+                             class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Fecha de entrega</label>
+                        <input type="date" id="task-dueDate" 
+                               class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Prioridad</label>
+                        <select id="task-priority" 
+                                class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Estado</label>
+                        <select id="task-status" 
+                                class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en-progreso">En progreso</option>
+                            <option value="completada">Completada</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" 
+                        class="bg-primary text-primary-foreground px-6 py-2 rounded-md hover:bg-primary/90 transition-colors">
+                    Agregar Tarea
+                </button>
+            </form>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="bg-card rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-1">
+                    <input type="text" id="search-input" placeholder="Buscar tareas..." 
+                           class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <select id="filter-priority" 
+                            class="px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="">Todas las prioridades</option>
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                        <option value="urgente">Urgente</option>
+                    </select>
+                    <select id="filter-status" 
+                            class="px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="">Todos los estados</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en-progreso">En progreso</option>
+                        <option value="completada">Completada</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de tareas -->
+        <div class="bg-card rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold">Tareas Universitarias</h2>
+                <span id="task-count" class="text-muted-foreground">0 tareas</span>
+            </div>
+            
+            <div id="tasks-container" class="space-y-4">
+                <!-- Las tareas se cargarán dinámicamente aquí -->
+                <div class="text-center py-8 text-muted-foreground">
+                    <p>No hay tareas registradas. ¡Agrega tu primera tarea!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar tarea -->
+    <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-background rounded-lg p-6 m-4 max-w-md w-full">
+            <h3 class="text-lg font-semibold mb-4">Editar Tarea</h3>
+            <form id="edit-form" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Título</label>
+                    <input type="text" id="edit-title" required 
+                           class="w-full px-3 py-2 border border-input rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Materia</label>
+                    <input type="text" id="edit-subject" 
+                           class="w-full px-3 py-2 border border-input rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Descripción</label>
+                    <textarea id="edit-description" rows="3"
+                             class="w-full px-3 py-2 border border-input rounded-md"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Fecha de entrega</label>
+                        <input type="date" id="edit-dueDate" 
+                               class="w-full px-3 py-2 border border-input rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Prioridad</label>
+                        <select id="edit-priority" 
+                                class="w-full px-3 py-2 border border-input rounded-md">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Estado</label>
+                    <select id="edit-status" 
+                            class="w-full px-3 py-2 border border-input rounded-md">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en-progreso">En progreso</option>
+                        <option value="completada">Completada</option>
+                    </select>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" id="cancel-edit" 
+                            class="px-4 py-2 border border-input rounded-md hover:bg-muted">
+                        Cancelar
+                    </button>
+                    <button type="
